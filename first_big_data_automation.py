@@ -52,7 +52,7 @@ print("\nDirectory changed !!!")
 for data in filtered_excel_file:
 
     excel_file = location + '/' + data+'.xlsx'
-    raw_df = pd.read_excel(excel_file, skiprows=12, index_col=0)
+    raw_df = pd.read_excel(excel_file, skiprows=12, index_col=0,dtype=object)
 
     filtered_df = raw_df[['Transaction No.','Action','Card Class','Card Type','Payment Method','Amount','Card No. ','Member ID','Transaction Date']].copy()
     #print(filtered_df.iloc[10])
@@ -72,8 +72,8 @@ for data in filtered_excel_file:
 
     #Edit excel file format
     worksheet.set_row(0, None, header_fmt)
-    worksheet.set_column('A:A', None, number_fmt)
-    worksheet.set_column('G:G', None, number_fmt)
+    #worksheet.set_column('A:A', None, number_fmt)
+    #worksheet.set_column('G:G', None, number_fmt)
     worksheet.set_column('F:F', None, money_fmt)
 
     #Exit writer and save excel
