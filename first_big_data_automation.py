@@ -12,7 +12,9 @@ import datetime
 import os
 
 # Request input PATH and directory name from USER 
+# Example: D:\python\big data\2512
 location = input('\nDirectory PATH of the excels? :')
+# Example: 2511
 date_name = input('\nDate of the data? :')
 
 # Filter
