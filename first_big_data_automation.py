@@ -79,6 +79,7 @@ for data in filtered_excel_file:
     #worksheet.set_column('A:A', None, number_fmt)
     #worksheet.set_column('G:G', None, number_fmt)
     worksheet.set_column('F:F', None, money_fmt)
+    worksheet.set_column('I:I',18)
 
     #Exit writer and save excel
     print('\nDone printing for '+data)
