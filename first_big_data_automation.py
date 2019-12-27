@@ -67,11 +67,15 @@ for data in filtered_excel_file:
 
     # Add some cell formats.
     number_fmt = workbook.add_format({'num_format': '0'})
-    header_fmt = workbook.add_format({'bold': True})
+    header_fmt = workbook.add_format({'bold': False})
     money_fmt  = workbook.add_format({'num_format': '#,##0.00'})
-
+    
     #Edit excel file format
-    worksheet.set_row(0, None, header_fmt)
+    # Test for for Formating
+    for col_num, value in enumerate(filtered_df.columns.values):
+        worksheet.write(0, col_num, value, header_fmt)
+    
+    #worksheet.set_row(0, None, header_fmt)
     #worksheet.set_column('A:A', None, number_fmt)
     #worksheet.set_column('G:G', None, number_fmt)
     worksheet.set_column('F:F', None, money_fmt)
