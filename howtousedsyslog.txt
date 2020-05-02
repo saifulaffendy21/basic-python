@@ -1,0 +1,84 @@
+
+# Setup centralized syslog server
+
+1. Configure log location
+2. Open firewall
+3. Install Rsyslog
+4. Configure Rsyslog
+5. Test:
+
+6. Setup logrotate
+
+
+$ sudo mkdir /var/log/syslog
+
+$ firewall-cmd --add-port=514/udp --permanent
+$ firewall-cmd --add-port=514/tcp --permanant
+$ firewall-cmd --reload
+
+$ sudo yum install rsyslog -y
+
+$ sudo nano /etc/rsyslog.conf
+
+
+#################################
+#START of rsyslog.conf file
+
+#uncomment UDP syslog reception
+module(load="imudp")
+input(type="imudp" port="514")
+
+#uncomment TCP syslog reception
+module(load="imtcp")
+input(type="imtcp" port="514")
+
+#saperate all host each file
+#edit at end of file
+$template PerHostLog,"/var/log/syslog/%HOSTNAME%.log"
+if $fromhost-ip startswith '192.' then -?PerHostLog
+& STOP
+
+#END of rsyslog.conf file
+#################################
+
+$ sudo systemctl restart rsyslog
+$ sudo systemctl status rsyslog
+
+$ wget https://raw.githubusercontent.com/edgoad/syslog-generator/master/syslogGen1.sh
+$ sudo nano syslogGen1.sh
+#################################
+#START of syslogGen1.sh file
+
+#edit destination syslog server
+
+DEST_IP="<your syslog server>"
+
+#END of syslogGen1.sh file
+#################################
+
+$ chmod +x syslogGen1.sh
+$ ./syslogGen1.sh
+
+$ sudo ls -l /var/log/syslog/
+
+$ sudo tail -f /var/log/syslog/192.168.190.2.log
+ 
+$ cd /etc/logrotate.d/
+$ cp rsyslog syslog
+#################################
+#START of syslog file
+
+/var/log/syslog/*.log
+{
+  rotate 365
+  maxage 366
+  daily
+  missingok
+  sharedscripts
+  postrotate
+      /usr/bin/systemctl kill -s HUP rsyslog.service > /dev/null 2>&1 || true
+  endscript
+ }
+ 
+#END of syslog file
+#################################
